@@ -5,6 +5,7 @@ function error404(req, res, next) {
 }
 
 function error500(err, req, res, next) {
+  console.log(err.message);
   return res.status(500).json({
     message: "internal server error",
   });

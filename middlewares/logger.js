@@ -1,4 +1,4 @@
-function logRequest(res, res, next) {
+function logRequest(req, res, next) {
   console.log(`${req.method} ${req.url}`);
   next();
 }
