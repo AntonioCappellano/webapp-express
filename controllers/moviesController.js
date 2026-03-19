@@ -1,4 +1,5 @@
 const connection = require("../data/connDb");
+
 const {
   handleFailQuery,
   handleResourceNotFound,
@@ -44,7 +45,24 @@ function show(req, res) {
   });
 }
 
-module.exports = { index, show };
+function storeReview(req, res) {
+  const { id } = req.params;
+  const { name, vote, text } = req.body;
+  const reviewSql = `
+  INSERT INTO movies.reviews 
+  (movie_id, name, vote, text) 
+  VALUES (?, ?, ?, ?)`;
+
+  connection.query(reviewSql, [id, name, vote, text], (err, result) => {
+    const showReviewSQL = `SELECT * FROM reviews WHERE id = ?`;
+    connection.query(showReviewSQL, [result.insertId], (err, result) => {
+      const [review] = result
+      res.json(review);
+    });
+  });
+}
+
+module.exports = { index, show, storeReview };
 
 // Path per immagini
 function buildMovieImgPath(image) {
